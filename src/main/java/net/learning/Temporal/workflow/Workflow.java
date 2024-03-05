@@ -2,14 +2,12 @@ package net.learning.Temporal.workflow;
 
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
+import net.learning.Temporal.api.OrderRequest;
 
 @WorkflowInterface
-public interface LoanApplicationWorkflow {
+public interface Workflow {
 
     @WorkflowMethod
-    void applyForALoan(
-            String loanNumber,
-            String ssn,
-            double amount);
+    void processOrder(OrderRequest orderRequest);
 
 }
