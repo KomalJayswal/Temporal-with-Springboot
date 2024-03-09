@@ -21,38 +21,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/order")
 public class OrderController {
 
+    /**
+     * service -> creates client -> creates factory -> creates worker on taskqueue -> registers 1. WF type 2. activities Impl
+     *
+     * options -> starts new workflow execution
+     *
+     */
     @PostMapping
     public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) {
 
+        //creates a new instance of WorkflowServiceStubs,which is part of the Temporal SDK, used to communicate with the Temporal service.
         WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(WorkflowServiceStubsOptions.newBuilder()
-                //.setEnableHttps(false)
-                //.setTarget("192.168.100.5:7233")
                 .build());
+        //creates a new instance of WorkflowClient, used to interact with workflows and activities in the Temporal service.
         WorkflowClient client = WorkflowClient.newInstance(service);
+        //creates a new instance of WorkerFactory, which is used to create workers that listen for and execute workflow tasks.
         WorkerFactory factory = WorkerFactory.newInstance(client);
+        //creates a worker instance that listens for tasks on a specific task queue named "TaskQueue".
         Worker worker = factory.newWorker("TaskQueue");
+        //registers the implementation class for the workflow type. WorkflowImpl.class is the class that implements the workflow logic.
         worker.registerWorkflowImplementationTypes(WorkflowImpl.class);
+        //registers the implementation class for activities. OrderActivityImpl is the class that implements the activities used by the workflow.
         // Activities are stateless and thread safe so a shared instance is used.
         worker.registerActivitiesImplementations(new OrderActivityImpl());
 
-        // Start listening to the Task Queue.
+        //starts the worker factory, causing the worker to begin listening for tasks on the specified task queue.
         factory.start();
 
-        // WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
+        //creates options for starting a new workflow execution. It specifies the task queue and workflow ID to use.
         WorkflowOptions options = WorkflowOptions.newBuilder()
                 .setTaskQueue("TaskQueue")
-                .setWorkflowId("WorkflowId") // If we do not provide this, then  it will go empty and temporal sdk will create a new UUID
+                .setWorkflowId("WorkflowId") // If we do not provide WorkflowId, then it will go empty and temporal sdk will create a new UUID itself
                 .build();
-        //WorkflowClient client = WorkflowClient.newInstance(service);
+
+       // -------
+       // TODO
+        //-------
+
         Workflow workflow = client.newWorkflowStub(Workflow.class, options);
         WorkflowExecution we = WorkflowClient.start(workflow::processOrder, orderRequest);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
-    // client -> factory -> worker or taskqueue -> activity
-
-    // client creates new workflow
-
-    // factory starts the workflow
-
 }
