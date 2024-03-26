@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TemporalWithSpringbootApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TemporalWithSpringbootApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TemporalWithSpringbootApplication.class, args);
+    }
 
 }
