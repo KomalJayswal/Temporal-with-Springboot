@@ -23,9 +23,8 @@ public class OrderController {
 
     /**
      * service -> creates client -> creates factory -> creates worker on taskqueue -> registers 1. WF type 2. activities Impl
-     *
+     * <p>
      * options -> starts new workflow execution
-     *
      */
     @PostMapping
     public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) {
@@ -54,12 +53,27 @@ public class OrderController {
                 .setWorkflowId("WorkflowId") // If we do not provide WorkflowId, then it will go empty and temporal sdk will create a new UUID itself
                 .build();
 
-       // -------
-       // TODO
-        //-------
+
+        /*
+        newWorkflowStub : used to create a new stub for interacting with a specific workflow type.
+
+        Workflow.class: This parameter specifies the interface or class that defines the workflow type.
+                        In our case, Workflow.class indicates that the stub being created will be capable of interacting with workflows
+                        that implement the Workflow interface. It's important to note that the provided class should match the interface
+                        or class used to define the workflow logic.
+
+        options : include configuration settings such as the task queue, workflow ID, workflow timeout,
+                  and other parameters related to workflow execution.
+         */
 
         Workflow workflow = client.newWorkflowStub(Workflow.class, options);
+        /*
+        WorkflowClient.start() : used to start a new workflow execution.
+        processOrder : the entry point for the workflow logic that needs to be executed
+        orderRequest : input that will be provided to the workflow during its execution
+        */
         WorkflowExecution we = WorkflowClient.start(workflow::processOrder, orderRequest);
+
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
