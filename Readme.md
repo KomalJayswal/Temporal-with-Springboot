@@ -12,14 +12,14 @@ temporal server start-dev
 ```
 Run in local
 ```
-http://localhost:8233/namespaces/default/workflows
+http://localhost:8080/namespaces/default/workflows
 ```
 ### Curl command
 ```
 curl --location 'http://localhost:8085/order' \
 --header 'Content-Type: application/json' \
 --data '{
-    "orderId": "1",
+    "orderId": "123",
     "paymentStatus": "STARTED"
 }'
 ```

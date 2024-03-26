@@ -7,15 +7,15 @@ import net.learning.Temporal.api.OrderRequest;
 public class OrderActivityImpl implements OrderActivity {
 
     public void placeOrder(String orderId) {
-        log.info("Order placed Successfully with orderID - {}", orderId);
+        log.info("Order placed Successfully with orderID : {}", orderId);
     }
 
     public void processPayment(OrderRequest orderRequest) {
         orderRequest.setPaymentStatus("COMPLETED");
-        log.info("Payment {} for OrderID - {}", orderRequest.getPaymentStatus(), orderRequest.getOrderId());
+        log.info("Payment {} for OrderID : {}", orderRequest.getPaymentStatus(), orderRequest.getOrderId());
     }
 
     public void completeOrder(String orderId) {
-        log.info("Order closed for orderID - {}", orderId);
+        log.info("Order closed for orderID : {}", orderId);
     }
 }
