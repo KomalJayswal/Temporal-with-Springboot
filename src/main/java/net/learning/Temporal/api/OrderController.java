@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class OrderController {
 
     /**
-     * service -> creates client -> creates factory -> creates worker on taskqueue -> registers 1. WF type 2. activities Impl
+     * service -> creates instance of client -> creates instance of factory -> creates worker on taskqueue -> that registers 1. WF type 2. activities Impl
      * <p>
      * options -> starts new workflow execution
      */
